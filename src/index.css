@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --bg: #0a0a0c;
+  --card-bg: #151619;
+  --accent: #a855f7; /* Purple 500 */
+  --accent-soft: rgba(168, 85, 247, 0.1);
+  --danger: #ff3e3e;
+  --text-primary: #ffffff;
+  --text-secondary: #8e9299;
+  --line: #2d2e33;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Скрываем прокрутку по умолчанию, она появится только внутри компонентов если нужно */
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Базовые эффекты ========== */
+
+.terminal-glow {
+  text-shadow: 0 0 10px var(--accent);
+}
+
+.scanline {
+  width: 100%;
+  height: 100px;
+  z-index: 10;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(168, 85, 247, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.1;
+  position: fixed;
+  bottom: 100%;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+/* ========== Анимации ========== */
+
+@keyframes scanline {
+  0% { bottom: 100%; }
+  100% { bottom: -100px; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+  }
+}
+
+@keyframes text-glitch {
+  0%, 100% { 
+    text-shadow: 0 0 10px var(--accent);
+    transform: translate(0);
+  }
+  20% { 
+    text-shadow: -2px 0 red, 2px 0 cyan;
+    transform: translate(-2px, 1px);
+  }
+  40% { 
+    text-shadow: 2px 0 red, -2px 0 cyan;
+    transform: translate(2px, -1px);
+  }
+  60% { 
+    text-shadow: 0 0 20px var(--accent);
+    transform: translate(0);
+  }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes count-up {
+  0% { 
+    transform: scale(1.5); 
+    opacity: 0;
+  }
+  50% { 
+    transform: scale(1.2); 
+    opacity: 1;
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1;
+  }
+}
+
+@keyframes success-burst {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes danger-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+  }
+}
+
+@keyframes correct-flash {
+  0% { background-color: rgba(16, 185, 129, 0.3); }
+  100% { background-color: transparent; }
+}
+
+@keyframes wrong-flash {
+  0% { background-color: rgba(239, 68, 68, 0.3); }
+  100% { background-color: transparent; }
+}
+
+/* ========== Классы эффектов ========== */
+
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-text-glitch {
+  animation: text-glitch 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  animation: ripple 1s ease-out forwards;
+  pointer-events: none;
+}
+
+.animate-count-up {
+  animation: count-up 0.5s ease-out forwards;
+}
+
+.animate-success-burst {
+  animation: success-burst 0.6s ease-out forwards;
+}
+
+.animate-danger-pulse {
+  animation: danger-pulse 1s ease-in-out infinite;
+}
+
+.animate-correct-flash {
+  animation: correct-flash 0.5s ease-out forwards;
+}
+
+.animate-wrong-flash {
+  animation: wrong-flash 0.5s ease-out forwards;
+}
+
+/* Градиентная рамка */
+.border-gradient {
+  background: linear-gradient(90deg, #a855f7, #ec4899, #a855f7);
+  background-size: 200% 100%;
+  animation: border-flow 3s linear infinite;
+}
+
+/* Эффект свечения */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+}
+
+.glow-red {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+/* ========== Кнопки ========== */
+
+button {
+  min-height: 44px;
+}
+
+/* ========== Адаптивные стили для мобильных ========== */
+
+@container (max-width: 350px) {
+  .smartphone-container {
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  /* Для очень маленьких экранов */
+  .smartphone-container {
+    max-width: 95vw !important;
+    aspect-ratio: 9/21 !important; /* Slightly taller to fit more content */
+    border-width: 4px !important;
+    border-radius: 1.5rem !important;
+    padding: 0.5rem !important; /* Minimal padding */
+  }
+
+  .smartphone-container {
+    height: calc(100dvh - 180px) !important;
+    min-height: 400px;
+  }
+  
+  .dialog-messages {
+    font-size: 0.6rem !important;
+  }
+  
+  .dialog-button {
+    padding: 0.4rem !important;
+    font-size: 0.6rem !important;
+  }
+  
+  h1 {
+    font-size: 2.5rem !important;
+  }
+}
+
+@media (min-width: 361px) and (max-width: 480px) {
+  /* Для маленьких смартфонов */
+  .smartphone-container {
+    max-width: 320px !important;
+  }
+}
+
+/* Адаптивные утилиты - применяются к элементам диалога */
+@media (max-width: 480px) {
+  .dialog-text {
+    font-size: 0.7rem;
+    line-height: 1.2;
+  }
+  
+  .dialog-button-text {
+    font-size: 0.6rem;
+  }
+  
+  .dialog-avatar {
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+  }
+}
+
+/* ========== Скроллбар ========== */
+
+.container {
+  overflow: auto;
+}
+
+/* Custom scrollbar styling for mobile */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
